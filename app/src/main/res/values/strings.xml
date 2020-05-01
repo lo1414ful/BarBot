@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">BarBot</string>
+    <!-- Main Screen -->
+    <string name="settings_recipes">Recipes</string>
+    <string name="settings_ingredients">Ingredients</string>
+    <string name="settings_bluetooth">Bluetooth</string>
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
