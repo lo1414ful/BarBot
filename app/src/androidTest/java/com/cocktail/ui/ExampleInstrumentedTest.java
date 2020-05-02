@@ -1,4 +1,4 @@
-package com.cocktail.barbot;
+package com.cocktail.ui;
 
 import android.content.Context;
 
