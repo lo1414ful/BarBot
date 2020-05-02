@@ -12,10 +12,18 @@ public class Ingredient {
     private int wait;
     private boolean activated;
 
+    /**
+     * Constructor for a new Ingredient
+     * @param name the name of the Ingredient (must not be null or empty string)
+     * @param pos the position
+     * @param hold the hold duration
+     * @param wait the wait duration between subsequent pours
+     * @throws IllegalArgumentException if the given durations are negative or if the name is empty
+     */
     public Ingredient(@NonNull String name, int pos, int hold, int wait) throws IllegalArgumentException {
-        if (name.equals("") || hold < 0 || wait < 0) {
+        if (name.replace(" ", "").equals("") || hold < 0 || wait < 0) {
             String message = "";
-            if (name.equals("")) {
+            if (name.replace(" ", "").equals("")) {
                 message = message.concat("\r\n  name must not be an empty string");
             }
             if (hold < 0) {
@@ -38,7 +46,10 @@ public class Ingredient {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) throws IllegalArgumentException {
+        if (name.replace(" ", "").equals("")) {
+            throw new IllegalArgumentException("name must not be empty");
+        }
         this.name = name;
     }
 
@@ -54,7 +65,10 @@ public class Ingredient {
         return hold;
     }
 
-    public void setHold(int hold) {
+    public void setHold(int hold) throws IllegalArgumentException {
+        if (hold < 0) {
+            throw new IllegalArgumentException("hold duration must not be negative");
+        }
         this.hold = hold;
     }
 
@@ -62,7 +76,10 @@ public class Ingredient {
         return wait;
     }
 
-    public void setWait(int wait) {
+    public void setWait(int wait) throws IllegalArgumentException {
+        if (wait < 0) {
+            throw new IllegalArgumentException("wait duration must not be negative");
+        }
         this.wait = wait;
     }
 
