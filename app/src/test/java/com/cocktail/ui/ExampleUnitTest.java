@@ -1,4 +1,4 @@
-package com.cocktail.barbot;
+package com.cocktail.ui;
 
 import org.junit.Test;
 
