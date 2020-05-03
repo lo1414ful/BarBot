@@ -7,29 +7,27 @@ import java.util.Objects;
 public class IngredientInRecipe {
 
     @NonNull
-    private Ingredient ingredient;
+    private final Ingredient ingredient;
     private int pours;
-    private int positionInRecipe;
+    @NonNull
+    private final Recipe containingRecipe;
 
-
-    /**
-     * Constructor for a new Link between Recipe and Ingredient
-     * @param ingredient the ingredient
-     * @param posInRec the position in the recipe. lower positions are poured first
-     * @throws IllegalArgumentException if the position is negative
-     */
-    public IngredientInRecipe(@NonNull Ingredient ingredient, int posInRec) throws IllegalArgumentException {
-        if (posInRec < 0) {
-            throw new IllegalArgumentException("position in recipe must not be negative");
-        }
-        this.ingredient = Objects.requireNonNull(ingredient, "ingredient must not be null");
+    public IngredientInRecipe(@NonNull Ingredient ingr, @NonNull Recipe containingRec) {
+        Objects.requireNonNull(ingr);
+        Objects.requireNonNull(containingRec);
+        this.ingredient = ingr;
+        this.containingRecipe = containingRec;
         pours = 1;
-        this.positionInRecipe = posInRec;
     }
 
     @NonNull
     public Ingredient getIngredient() {
-        return ingredient;
+        return this.ingredient;
+    }
+
+    @NonNull
+    private Recipe getContainingRecipe() {
+        return this.containingRecipe;
     }
 
     public int getPours() {
@@ -38,20 +36,13 @@ public class IngredientInRecipe {
 
     public void setPours(int pours) {
         if (pours < 1) {
-            throw new IllegalArgumentException("pours must be positive");
+            throw new IllegalArgumentException("number of pours must be positive");
         }
         this.pours = pours;
     }
 
     public int getPositionInRecipe() {
-        return positionInRecipe;
-    }
-
-    public void setPositionInRecipe(int positionInRecipe) {
-        if (positionInRecipe < 0) {
-            throw new IllegalArgumentException("position in recipe must not be negative");
-        }
-        this.positionInRecipe = positionInRecipe;
+        return containingRecipe.getPositionOfIngredient(this);
     }
 
     @Override
@@ -60,11 +51,11 @@ public class IngredientInRecipe {
             return false;
         }
         IngredientInRecipe other = (IngredientInRecipe) o;
-        return other.ingredient.equals(this.ingredient);
+        return ingredient.equals(other.ingredient) && other.getContainingRecipe().equals(getContainingRecipe());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ingredient);
+        return Objects.hash(containingRecipe, ingredient);
     }
 }

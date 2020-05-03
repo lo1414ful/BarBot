@@ -1,102 +1,118 @@
 package com.cocktail.logic;
 
+import androidx.annotation.NonNull;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 
 public class IngredientInRecipeTest {
 
-    private Ingredient ingr;
-    private IngredientInRecipe iir, allMatch, ingrMatch, posMatch, noMatch;
+    private Ingredient rum, cola;
+    private Recipe cubaLibre, mojito;
+
+    private IngredientInRecipe iir, allMatch, ingrMatch, recMatch, noMatch;
 
     @Before
-    public void setup() {
-        ingr = new Ingredient("bla", 2, 3, 4);
-        iir = new IngredientInRecipe(ingr, 0);
-        allMatch = new IngredientInRecipe(ingr, 0);
-        ingrMatch = new IngredientInRecipe(ingr, 15);
-        posMatch = new IngredientInRecipe(new Ingredient("other bla", 2, 3, 4), 0);
-        noMatch = new IngredientInRecipe(new Ingredient("blib", 5,6,7), 100);
+    public void setUp() throws Exception {
+        rum = new Ingredient("Havanna Club",2, 3, 4);
+        cola = new Ingredient("Cola", 6,7,8);
+        cubaLibre = new Recipe("Cuba Libre");
+        mojito = new Recipe("Mojito");
+        iir = new IngredientInRecipe(rum, cubaLibre);
+        allMatch = new IngredientInRecipe(rum, cubaLibre);
+        ingrMatch = new IngredientInRecipe(rum, mojito);
+        recMatch = new IngredientInRecipe(cola, cubaLibre);
+        noMatch = new IngredientInRecipe(cola, mojito);
     }
 
-
     @After
-    public void cleanup() {
-        ingr = null;
+    public void tearDown() throws Exception {
+        rum = null;
+        cola = null;
+        cubaLibre = null;
+        mojito = null;
         iir = null;
         allMatch = null;
         ingrMatch = null;
-        posMatch = null;
+        recMatch = null;
         noMatch = null;
     }
 
     @Test
-    public void testLegalConstructor() {
-        IngredientInRecipe ingrInRec = new IngredientInRecipe(ingr, 0);
-        assertEquals(ingr, ingrInRec.getIngredient());
-        assertEquals(0, ingrInRec.getPositionInRecipe());
-        assertEquals(1, ingrInRec.getPours());
+    public void constructor() {
+        IngredientInRecipe iir = new IngredientInRecipe(rum, cubaLibre);
     }
 
     @Test
-    public void testIllegalConstructor() {
-        Throwable t = assertThrows(NullPointerException.class, () -> new IngredientInRecipe(null, 0));
-        assertEquals("ingredient must not be null", t.getMessage());
-        t = assertThrows(IllegalArgumentException.class, () -> new IngredientInRecipe(ingr, -3));
-        assertEquals("position in recipe must not be negative", t.getMessage());
+    public void getIngredient() {
+        assertEquals(rum, iir.getIngredient());
     }
 
     @Test
-    public void testLegalSetterGetter() {
-        iir.setPositionInRecipe(3);
-        assertEquals(3, iir.getPositionInRecipe());
+    public void pours() {
         assertEquals(1, iir.getPours());
-        iir.setPours(4);
-        assertEquals(4, iir.getPours());
-        assertEquals(3, iir.getPositionInRecipe());
-        iir.setPositionInRecipe(0);
-        assertEquals(0, iir.getPositionInRecipe());
-        assertEquals(4, iir.getPours());
+        iir.setPours(5);
+        assertEquals(5, iir.getPours());
+        Throwable t = assertThrows(IllegalArgumentException.class, () -> iir.setPours(-5));
+        assertEquals("number of pours must be positive", t.getMessage());
+        t = assertThrows(IllegalArgumentException.class, () -> iir.setPours(0));
+        assertEquals("number of pours must be positive", t.getMessage());
+        assertEquals(5, iir.getPours());
     }
 
     @Test
-    public void testIllegalSetterGetter() {
-        Throwable t = assertThrows(IllegalArgumentException.class, () -> iir.setPours(-3));
-        assertEquals("pours must be positive", t.getMessage());
-        t = assertThrows(IllegalArgumentException.class, () -> iir.setPours(0));
-        assertEquals("pours must be positive", t.getMessage());
-        t = assertThrows(IllegalArgumentException.class, () -> iir.setPositionInRecipe(-3));
-        assertEquals("position in recipe must not be negative", t.getMessage());
+    public void positionInRecipe() {
+        RecipeDummy dummy = new RecipeDummy("dummy");
+        dummy.addIngredient(rum);
+        IngredientInRecipe rumInRec = dummy.lastAdded;
+        assertEquals(0, rumInRec.getPositionInRecipe());
+        dummy.addIngredient(cola);
+        IngredientInRecipe colaInRec = dummy.lastAdded;
+        assertEquals(1, colaInRec.getPositionInRecipe());
+        dummy.swapPositions(rum, cola);
+        assertEquals(0, colaInRec.getPositionInRecipe());
+        assertEquals(1, rumInRec.getPositionInRecipe());
     }
 
     @Test
     public void testEquals() {
-        assertNotEquals("equals with blank object", iir, new Object());
-        assertEquals("equals itself", iir, iir);
-        assertEquals("equals equal object", allMatch, iir);
-        assertEquals("equals only in ingredient", ingrMatch, iir);
-        assertNotEquals("equals only in posInRec", posMatch, iir);
-        assertNotEquals("equals null", null, iir);
-        int oldPours = allMatch.getPours();
-        allMatch.setPours(99);
-        assertEquals("equals different pours", iir, allMatch);
-        allMatch.setPours(oldPours);
-        int oldPosition = allMatch.getPositionInRecipe();
-        allMatch.setPositionInRecipe(33);
-        assertEquals("equals different position", iir, allMatch);
+        assertEquals(iir, iir);
+        assertEquals(iir, allMatch);
+        assertNotEquals(iir, ingrMatch);
+        assertNotEquals(iir, recMatch);
+        assertNotEquals(iir, noMatch);
+        assertNotEquals(iir, null);
+        assertNotEquals(iir, new Object());
     }
 
     @Test
     public void testHashCode() {
-        assertEquals("identical hashCode", iir.hashCode(), iir.hashCode());
-        assertEquals("allMatch hashCode", allMatch.hashCode(), iir.hashCode());
-        assertEquals("ingrMatch hashCode", ingrMatch.hashCode(), iir.hashCode());
+        assertEquals(iir.hashCode(), iir.hashCode());
+        assertEquals(iir.hashCode(), allMatch.hashCode());
     }
 
-}
 
+    private class RecipeDummy extends Recipe {
+
+        private IngredientInRecipe lastAdded;
+
+        private RecipeDummy(String name) {
+            super(name);
+            lastAdded = null;
+        }
+
+        @Override
+        public boolean addIngredient(@NonNull Ingredient ingredient) {
+            IngredientInRecipe iir = new IngredientInRecipe(ingredient, this);
+            if (ingredients.contains(iir)) {
+                return false;
+            }
+            ingredients.add(iir);
+            lastAdded = iir;
+            return true;
+        }
+    }
+}

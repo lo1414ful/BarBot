@@ -115,6 +115,8 @@ public class IngredientTest {
         assertNotEquals("equals different ingredients, different values", identity, noMatch);
         assertEquals("equals different Ingredients, same values", identity, allMatch);
         assertEquals("equals different Ingredients, only name matches", identity, nameMatch);
+        assertFalse("equals null", identity.equals(null));
+        assertNotEquals("equals blank object", identity, new Object());
     }
 
     @Test
