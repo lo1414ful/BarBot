@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class Ingredient {
 
+    @NonNull
     private String name;
     private int position;
     private int hold;
@@ -21,6 +22,7 @@ public class Ingredient {
      * @throws IllegalArgumentException if the given durations are negative or if the name is empty
      */
     public Ingredient(@NonNull String name, int pos, int hold, int wait) throws IllegalArgumentException {
+        Objects.requireNonNull(name, "name must not be null");
         if (name.replace(" ", "").equals("") || hold < 0 || wait < 0) {
             String message = "";
             if (name.replace(" ", "").equals("")) {
@@ -41,12 +43,13 @@ public class Ingredient {
         activated = false;
     }
 
-
+    @NonNull
     public String getName() {
         return name;
     }
 
     public void setName(@NonNull String name) throws IllegalArgumentException {
+        Objects.requireNonNull(name, "name must not be null");
         if (name.replace(" ", "").equals("")) {
             throw new IllegalArgumentException("name must not be empty");
         }
