@@ -82,6 +82,9 @@ public class IngredientTest {
         assertEquals(basicMessage + holdMessage + waitMessage, e.getMessage());
         e = assertThrows(IllegalArgumentException.class, () -> new Ingredient(" ", 2, -3, -4));
         assertEquals(basicMessage + nameMessage + holdMessage + waitMessage, e.getMessage());
+
+        e = assertThrows(NullPointerException.class, () -> new Ingredient(null, 5,7,9));
+        assertEquals("name must not be null", e.getMessage());
     }
 
     @Test
@@ -101,6 +104,9 @@ public class IngredientTest {
         e = assertThrows(IllegalArgumentException.class, () -> identity.setWait(-5));
         assertEquals("wait duration must not be negative", e.getMessage());
         assertEquals(oldWait, identity.getWait());
+
+        e = assertThrows(NullPointerException.class, () -> identity.setName(null));
+        assertEquals("name must not be null", e.getMessage());
     }
 
     @Test
@@ -114,7 +120,7 @@ public class IngredientTest {
     @Test
     public void testHashCode() {
         assertEquals("hash itself", identity.hashCode(), identity.hashCode());
-        assertNotEquals("hash different ingredients, different values", identity.hashCode(), noMatch.hashCode());
+        //("hash different ingredients, different values", identity.hashCode(), noMatch.hashCode()); //that condition is not always true!!!
         assertEquals("hash different ingredients, same values", identity.hashCode(), allMatch.hashCode());
         assertEquals("hash different ingredients, only name matches", identity.hashCode(), nameMatch.hashCode());
     }

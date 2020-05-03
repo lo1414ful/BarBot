@@ -19,11 +19,11 @@ public class IngredientInRecipe {
      * @throws IllegalArgumentException if the position is negative
      */
     public IngredientInRecipe(@NonNull Ingredient ingredient, int posInRec) throws IllegalArgumentException {
-        this.ingredient = ingredient;
-        pours = 1;
         if (posInRec < 0) {
-            throw new IllegalArgumentException("position in recipe < 0");
+            throw new IllegalArgumentException("position in recipe must not be negative");
         }
+        this.ingredient = Objects.requireNonNull(ingredient, "ingredient must not be null");
+        pours = 1;
         this.positionInRecipe = posInRec;
     }
 
@@ -37,6 +37,9 @@ public class IngredientInRecipe {
     }
 
     public void setPours(int pours) {
+        if (pours < 1) {
+            throw new IllegalArgumentException("pours must be positive");
+        }
         this.pours = pours;
     }
 
@@ -45,6 +48,9 @@ public class IngredientInRecipe {
     }
 
     public void setPositionInRecipe(int positionInRecipe) {
+        if (positionInRecipe < 0) {
+            throw new IllegalArgumentException("position in recipe must not be negative");
+        }
         this.positionInRecipe = positionInRecipe;
     }
 
