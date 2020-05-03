@@ -17,6 +17,7 @@ public class IngrInRec {
         Objects.requireNonNull(containingRec);
         this.ingredient = ingr;
         this.containingRecipe = containingRec;
+        pours = 1;
     }
 
     @NonNull
