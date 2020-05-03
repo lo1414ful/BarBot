@@ -53,7 +53,7 @@ public class IngredientTest {
         i.setHold(newHold);
         i.setWait(newWait);
         i.setActivated(true);
-        assertEquals("new name", newName + "ERROR", i.getName());
+        assertEquals("new name", newName, i.getName());
         assertEquals("new position", newPos, i.getPosition());
         assertEquals("new hold", newHold, i.getHold());
         assertEquals("new wait", newWait, i.getWait());
