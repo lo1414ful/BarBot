@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
-public class IngrInRec {
+public class IngredientInRecipe {
 
     @NonNull
     private final Ingredient ingredient;
@@ -12,7 +12,7 @@ public class IngrInRec {
     @NonNull
     private final Recipe containingRecipe;
 
-    public IngrInRec(@NonNull Ingredient ingr, @NonNull Recipe containingRec) {
+    public IngredientInRecipe(@NonNull Ingredient ingr, @NonNull Recipe containingRec) {
         Objects.requireNonNull(ingr);
         Objects.requireNonNull(containingRec);
         this.ingredient = ingr;
@@ -50,7 +50,7 @@ public class IngrInRec {
         if (o == null || !this.getClass().isAssignableFrom(o.getClass())) {
             return false;
         }
-        IngrInRec other = (IngrInRec) o;
+        IngredientInRecipe other = (IngredientInRecipe) o;
         return ingredient.equals(other.ingredient) && other.getContainingRecipe().equals(getContainingRecipe());
     }
 

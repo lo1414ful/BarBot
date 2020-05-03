@@ -12,7 +12,7 @@ public class Recipe {
 
     private String name;
 
-    protected final List<IngrInRec> ingredients;
+    protected final List<IngredientInRecipe> ingredients;
 
     /**
      * Constructor for a new Recipe
@@ -49,7 +49,7 @@ public class Recipe {
      */
     public boolean addIngredient(@NonNull Ingredient ingredient) {
         Objects.requireNonNull(ingredient, "ingredient must not be null");
-        IngrInRec iir = new IngrInRec(ingredient, this);
+        IngredientInRecipe iir = new IngredientInRecipe(ingredient, this);
         if (ingredients.contains(iir)) {
             return false;
         }
@@ -79,7 +79,7 @@ public class Recipe {
      */
     public boolean removeIngredient(@NonNull Ingredient toRemove) {
         Objects.requireNonNull(toRemove, "ingredient must not be null");
-        IngrInRec iir = new IngrInRec(toRemove, this);
+        IngredientInRecipe iir = new IngredientInRecipe(toRemove, this);
         return ingredients.remove(iir);
     }
 
@@ -92,10 +92,10 @@ public class Recipe {
     public boolean swapPositions(@NonNull Ingredient a, @NonNull Ingredient b) {
         Objects.requireNonNull(a, "ingredient must not be null");
         Objects.requireNonNull(b, "ingredient must not be null");
-        return swapPositions(new IngrInRec(a, this), new IngrInRec(b, this));
+        return swapPositions(new IngredientInRecipe(a, this), new IngredientInRecipe(b, this));
     }
 
-    public boolean swapPositions(@NonNull IngrInRec a, @NonNull IngrInRec b) {
+    public boolean swapPositions(@NonNull IngredientInRecipe a, @NonNull IngredientInRecipe b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
         if (!ingredients.contains(a) || !ingredients.contains(b)) {
@@ -104,7 +104,7 @@ public class Recipe {
         int indexA = ingredients.indexOf(a);
         int indexB = ingredients.indexOf(b);
         if (indexA == indexB) return true;
-        IngrInRec buff = ingredients.get(indexA);
+        IngredientInRecipe buff = ingredients.get(indexA);
         ingredients.set(indexA, ingredients.get(indexB));
         ingredients.set(indexB, buff);
         return true;
@@ -115,7 +115,7 @@ public class Recipe {
             throw new IndexOutOfBoundsException("position(s) are out of bounds");
         }
         if (pos1 == pos2) return;
-        IngrInRec buff = ingredients.get(pos1);
+        IngredientInRecipe buff = ingredients.get(pos1);
         ingredients.set(pos1, ingredients.get(pos2));
         ingredients.set(pos2, buff);
         return;
@@ -123,10 +123,10 @@ public class Recipe {
 
     public int getPositionOfIngredient(@NonNull Ingredient ingr) {
         Objects.requireNonNull(ingr);
-        return getPositionOfIngredient(new IngrInRec(ingr, this));
+        return getPositionOfIngredient(new IngredientInRecipe(ingr, this));
     }
 
-    public int getPositionOfIngredient(@NonNull IngrInRec ingr) {
+    public int getPositionOfIngredient(@NonNull IngredientInRecipe ingr) {
         Objects.requireNonNull(ingr);
         return ingredients.indexOf(ingr);
     }

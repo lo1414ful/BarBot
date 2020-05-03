@@ -165,20 +165,20 @@ public class RecipeTest {
 
     @Test
     public void testGetPositionOfIngredient() {
-        assertThrows(NullPointerException.class, () -> recipe.getPositionOfIngredient((IngrInRec) null));
+        assertThrows(NullPointerException.class, () -> recipe.getPositionOfIngredient((IngredientInRecipe) null));
         assertThrows(NullPointerException.class, () -> recipe.getPositionOfIngredient((Ingredient) null));
         assertEquals(-1, recipe.getPositionOfIngredient(ingr));
-        assertEquals(-1, recipe.getPositionOfIngredient(new IngrInRec(ingr, recipe)));
+        assertEquals(-1, recipe.getPositionOfIngredient(new IngredientInRecipe(ingr, recipe)));
         assertTrue(recipe.addIngredient(ingr));
         assertEquals(0, recipe.getPositionOfIngredient(ingr));
-        assertEquals(0, recipe.getPositionOfIngredient(new IngrInRec(ingr, recipe)));
+        assertEquals(0, recipe.getPositionOfIngredient(new IngredientInRecipe(ingr, recipe)));
         Ingredient newIngr = new Ingredient("Pisswater", 2, 3, 4);
         assertEquals(-1, recipe.getPositionOfIngredient(newIngr));
         assertTrue(recipe.addIngredient(newIngr));
         assertEquals(0, recipe.getPositionOfIngredient(ingr));
         assertEquals(1, recipe.getPositionOfIngredient(newIngr));
-        assertEquals(0, recipe.getPositionOfIngredient(new IngrInRec(ingr, recipe)));
-        assertEquals(1, recipe.getPositionOfIngredient(new IngrInRec(newIngr, recipe)));
+        assertEquals(0, recipe.getPositionOfIngredient(new IngredientInRecipe(ingr, recipe)));
+        assertEquals(1, recipe.getPositionOfIngredient(new IngredientInRecipe(newIngr, recipe)));
         recipe.removeIngredient(0);
         assertEquals(-1, recipe.getPositionOfIngredient(ingr));
         assertEquals(0, recipe.getPositionOfIngredient(newIngr));
@@ -202,8 +202,8 @@ public class RecipeTest {
     public void testSwapPosition1() {
         recipe.addIngredient(ingr);
         recipe.addIngredient(pw);
-        IngrInRec ingrInRec = new IngrInRec(ingr, recipe);
-        IngrInRec pwInRec = new IngrInRec(pw, recipe);
+        IngredientInRecipe ingrInRec = new IngredientInRecipe(ingr, recipe);
+        IngredientInRecipe pwInRec = new IngredientInRecipe(pw, recipe);
         assertEquals(0, recipe.getPositionOfIngredient(ingr));
         assertEquals(1, recipe.getPositionOfIngredient(pw));
         assertTrue(recipe.swapPositions(ingrInRec, pwInRec));
@@ -225,8 +225,8 @@ public class RecipeTest {
         assertTrue(recipe.swapPositions(ingr, ingr));
         assertTrue(recipe.swapPositions(ingr, pw));
 
-        IngrInRec iir = new IngrInRec(ingr, new Recipe("poop cocktail"));
-        assertFalse(recipe.swapPositions(new IngrInRec(ingr, recipe), iir));
+        IngredientInRecipe iir = new IngredientInRecipe(ingr, new Recipe("poop cocktail"));
+        assertFalse(recipe.swapPositions(new IngredientInRecipe(ingr, recipe), iir));
     }
 
     @Test

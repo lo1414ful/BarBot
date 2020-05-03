@@ -8,12 +8,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class IngrInRecTest {
+public class IngredientInRecipeTest {
 
     private Ingredient rum, cola;
     private Recipe cubaLibre, mojito;
 
-    private IngrInRec iir, allMatch, ingrMatch, recMatch, noMatch;
+    private IngredientInRecipe iir, allMatch, ingrMatch, recMatch, noMatch;
 
     @Before
     public void setUp() throws Exception {
@@ -21,11 +21,11 @@ public class IngrInRecTest {
         cola = new Ingredient("Cola", 6,7,8);
         cubaLibre = new Recipe("Cuba Libre");
         mojito = new Recipe("Mojito");
-        iir = new IngrInRec(rum, cubaLibre);
-        allMatch = new IngrInRec(rum, cubaLibre);
-        ingrMatch = new IngrInRec(rum, mojito);
-        recMatch = new IngrInRec(cola, cubaLibre);
-        noMatch = new IngrInRec(cola, mojito);
+        iir = new IngredientInRecipe(rum, cubaLibre);
+        allMatch = new IngredientInRecipe(rum, cubaLibre);
+        ingrMatch = new IngredientInRecipe(rum, mojito);
+        recMatch = new IngredientInRecipe(cola, cubaLibre);
+        noMatch = new IngredientInRecipe(cola, mojito);
     }
 
     @After
@@ -43,7 +43,7 @@ public class IngrInRecTest {
 
     @Test
     public void constructor() {
-        IngrInRec iir = new IngrInRec(rum, cubaLibre);
+        IngredientInRecipe iir = new IngredientInRecipe(rum, cubaLibre);
     }
 
     @Test
@@ -67,10 +67,10 @@ public class IngrInRecTest {
     public void positionInRecipe() {
         RecipeDummy dummy = new RecipeDummy("dummy");
         dummy.addIngredient(rum);
-        IngrInRec rumInRec = dummy.lastAdded;
+        IngredientInRecipe rumInRec = dummy.lastAdded;
         assertEquals(0, rumInRec.getPositionInRecipe());
         dummy.addIngredient(cola);
-        IngrInRec colaInRec = dummy.lastAdded;
+        IngredientInRecipe colaInRec = dummy.lastAdded;
         assertEquals(1, colaInRec.getPositionInRecipe());
         dummy.swapPositions(rum, cola);
         assertEquals(0, colaInRec.getPositionInRecipe());
@@ -97,7 +97,7 @@ public class IngrInRecTest {
 
     private class RecipeDummy extends Recipe {
 
-        private IngrInRec lastAdded;
+        private IngredientInRecipe lastAdded;
 
         private RecipeDummy(String name) {
             super(name);
@@ -106,7 +106,7 @@ public class IngrInRecTest {
 
         @Override
         public boolean addIngredient(@NonNull Ingredient ingredient) {
-            IngrInRec iir = new IngrInRec(ingredient, this);
+            IngredientInRecipe iir = new IngredientInRecipe(ingredient, this);
             if (ingredients.contains(iir)) {
                 return false;
             }
