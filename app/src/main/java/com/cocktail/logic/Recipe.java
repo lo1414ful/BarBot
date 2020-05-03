@@ -7,14 +7,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class Recipe {
 
 
     private String name;
 
-    private Set<IngredientInRecipe> ingredients;
+    private final List<IngrInRec> ingredients;
 
     /**
      * Constructor for a new Recipe
@@ -26,7 +25,7 @@ public class Recipe {
             throw new IllegalArgumentException("name must not be empty");
         }
         this.name = name;
-        ingredients = new HashSet<>();
+        ingredients = new ArrayList<>();
     }
 
     @NonNull
@@ -49,28 +48,25 @@ public class Recipe {
      */
     public boolean addIngredient(@NonNull Ingredient ingredient) {
         Objects.requireNonNull(ingredient, "ingredient must not be null");
-        IngredientInRecipe iir = new IngredientInRecipe(ingredient, this.ingredients.size());
-        return ingredients.add(iir);
+        IngrInRec iir = new IngrInRec(ingredient, this);
+        if (ingredients.contains(iir)) {
+            return false;
+        }
+        ingredients.add(iir);
+        return true;
     }
 
     /**
      * removes the ingredient at the given position in the recipe (starting from 0)
      * @param position the position to remove from
      * @return true, if the ingredient was successfully removed, false otherwise if the position is out of bounds
+     * @throws IndexOutOfBoundsException if position is out of bounds
      */
-    public boolean removeIngredient(int position) {
+    public Ingredient removeIngredient(int position) {
         if (position < 0 || position >= this.ingredients.size()) {
-            return false;
+            throw new IndexOutOfBoundsException("position out if bounds");
         }
-        IngredientInRecipe toRemove = null;
-        for (IngredientInRecipe iir : this.ingredients) {
-            if (iir.getPositionInRecipe() == position) {
-                toRemove = iir;
-            } else if (iir.getPositionInRecipe() > position) {
-                iir.setPositionInRecipe(iir.getPositionInRecipe() - 1);
-            }
-        }
-        return this.ingredients.remove(toRemove);
+        return ingredients.remove(position).getIngredient();
     }
 
     /**
@@ -78,8 +74,10 @@ public class Recipe {
      * @param toRemove the ingredient to remove
      * @return true, if the ingredient was removed successfully, false otherwise or if the given ingredient was not part of this recipe
      */
-    public boolean removeIngredient(@NonNull IngredientInRecipe toRemove) {
-        return removeIngredient(toRemove.getPositionInRecipe());
+    public boolean removeIngredient(@NonNull Ingredient toRemove) {
+        Objects.requireNonNull(toRemove, "ingredient must not be null");
+        IngrInRec iir = new IngrInRec(toRemove, this);
+        return ingredients.remove(iir);
     }
 
     /**
@@ -87,63 +85,34 @@ public class Recipe {
      * @param a first ingredient
      * @param b second ingredient
      */
-    public void swapPositions (IngredientInRecipe a, IngredientInRecipe b) {
-        //TODO
+    public boolean swapPositions(@NonNull Ingredient a,@NonNull Ingredient b) {
+        Objects.requireNonNull(a, "ingredient must not be null");
+        Objects.requireNonNull(b, "ingredient must not be null");
+        return swapPositions(new IngrInRec(a, this), new IngrInRec(b, this));
     }
 
-
-    private class ListSet {
-
-        private final Recipe recipe;
-        private final Set<IngredientInRecipe> ingredientsSet;
-        private final List<IngredientInRecipe> ingredientsList;
-
-        private ListSet(@NonNull Recipe rec) {
-            Objects.requireNonNull(rec, "recipe must not be null");
-            this.recipe = rec;
-            ingredientsSet = new HashSet<>();
-            ingredientsList = new ArrayList<>();
-        }
-
-        public boolean addIngredient(@NonNull Ingredient ingr) {
-            Objects.requireNonNull(ingr, "ingredient must not be null");
-            IngredientInRecipe iir = new IngredientInRecipe(ingr, ingredientsList.size());
-            if (ingredients.contains(iir)) {
-                return false;
-            }
-            ingredientsSet.add(iir);
-            ingredientsList.add(iir);
-            return true;
-        }
-
-        public boolean removeIngredient(@NonNull IngredientInRecipe iir) {
-            Objects.requireNonNull(iir, "ingredient must not be null");
-            if (!ingredientsSet.contains(iir)) {
-                return false;
-            }
-            ingredientsSet.remove(iir);
-            ingredientsList.remove(iir);
-            return true;
-        }
-
-        public boolean swapIngredients(@NonNull Ingredient a, @NonNull Ingredient b) {
-            Objects.requireNonNull(a, "ingredient must not be null");
-            Objects.requireNonNull(b, "ingredient must not be null");
-            //TODO
+    public boolean swapPositions(@NonNull IngrInRec a, @NonNull IngrInRec b) {
+        Objects.requireNonNull(a);
+        Objects.requireNonNull(b);
+        if (!ingredients.contains(a) || !ingredients.contains(b)) {
             return false;
         }
-
-        private boolean isPartOfThisRecipe(IngredientInRecipe iir) {
-            //TODO
-            return false;
-        }
-
-
-
-
-
-
-
-
+        int indexA = ingredients.indexOf(a);
+        int indexB = ingredients.indexOf(b);
+        IngrInRec buff = ingredients.get(indexA);
+        ingredients.set(indexA, ingredients.get(indexB));
+        ingredients.set(indexB, buff);
+        return true;
     }
+
+    public int getPositionOfIngredient(@NonNull Ingredient ingr) {
+        Objects.requireNonNull(ingr);
+        return getPositionOfIngredient(new IngrInRec(ingr, this));
+    }
+
+    public int getPositionOfIngredient(@NonNull IngrInRec ingr) {
+        Objects.requireNonNull(ingr);
+        return ingredients.indexOf(ingr);
+    }
+
 }

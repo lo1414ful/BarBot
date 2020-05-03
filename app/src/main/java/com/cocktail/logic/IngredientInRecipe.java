@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
+
+@Deprecated
 public class IngredientInRecipe {
 
     @NonNull
