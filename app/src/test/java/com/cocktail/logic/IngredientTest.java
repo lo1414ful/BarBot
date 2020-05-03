@@ -2,15 +2,13 @@ package com.cocktail.logic;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.Is.isA;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class IngredientTest {
 
@@ -36,12 +34,12 @@ public class IngredientTest {
 
     @Test
     public void testLegalParameters() {
-        String ingrName = "name";
+        String ingredientName = "name";
         int position = 3;
         int hold = 14;
         int wait = 12;
-        Ingredient i = new Ingredient(ingrName, position, hold, wait);
-        assertEquals("name", ingrName, i.getName());
+        Ingredient i = new Ingredient(ingredientName, position, hold, wait);
+        assertEquals("name", ingredientName, i.getName());
         assertEquals("position", position, i.getPosition());
         assertEquals("hold", hold, i.getHold());
         assertEquals("wait", wait, i.getWait());
@@ -63,7 +61,7 @@ public class IngredientTest {
     }
 
     @Test
-    public void testConstuctorExceptions() {
+    public void testConstructorExceptions() {
         String basicMessage = "failed to create Ingredient:";
         String nameMessage = "\r\n  name must not be an empty string";
         String holdMessage = "\r\n  hold duration must not be negative";
