@@ -14,12 +14,13 @@ public class Ingredient {
     private boolean activated;
 
     /**
-     * Constructor for a new Ingredient
+     * Constructs an Ingredient which has a name, a position, a hold- and a wait duration between pours
+     *
      * @param name the name of the Ingredient (must not be null or empty string)
      * @param pos the position
-     * @param hold the hold duration
-     * @param wait the wait duration between subsequent pours
-     * @throws IllegalArgumentException if the given durations are negative or if the name is empty
+     * @param hold the hold duration (must not be negative)
+     * @param wait the wait duration between subsequent pours (must not be negative)
+     * @throws IllegalArgumentException if the given durations are negative or if the name is an empty string
      */
     public Ingredient(@NonNull String name, int pos, int hold, int wait) throws IllegalArgumentException {
         Objects.requireNonNull(name, "name must not be null");
@@ -43,11 +44,20 @@ public class Ingredient {
         activated = false;
     }
 
+
+    /**
+     * @return the name of the ingredient
+     */
     @NonNull
     public String getName() {
         return name;
     }
 
+    /**
+     * sets the name of the ingredient
+     * @param name the name
+     * @throws IllegalArgumentException if the given name is an empty string
+     */
     public void setName(@NonNull String name) throws IllegalArgumentException {
         Objects.requireNonNull(name, "name must not be null");
         if (name.replace(" ", "").equals("")) {
@@ -56,18 +66,34 @@ public class Ingredient {
         this.name = name;
     }
 
+    /**
+     *
+     * @return the position of the ingredient
+     */
     public int getPosition() {
         return position;
     }
 
+    /**
+     * sets the position of the ingredient
+     * @param position the position
+     */
     public void setPosition(int position) {
         this.position = position;
     }
 
+    /**
+     * @return the hold duration of the ingredient
+     */
     public int getHold() {
         return hold;
     }
 
+    /**
+     * sets the hold duration of the ingredient
+     * @param hold the hold duration
+     * @throws IllegalArgumentException if the given duration is negative
+     */
     public void setHold(int hold) throws IllegalArgumentException {
         if (hold < 0) {
             throw new IllegalArgumentException("hold duration must not be negative");
@@ -75,10 +101,18 @@ public class Ingredient {
         this.hold = hold;
     }
 
+    /**
+     * @return the wait duration of the ingredient
+     */
     public int getWait() {
         return wait;
     }
 
+    /**
+     * sets the wait duration of the ingredient
+     * @param wait the wait duration
+     * @throws IllegalArgumentException if the given duration is negative
+     */
     public void setWait(int wait) throws IllegalArgumentException {
         if (wait < 0) {
             throw new IllegalArgumentException("wait duration must not be negative");
@@ -86,11 +120,17 @@ public class Ingredient {
         this.wait = wait;
     }
 
-
+    /**
+     * @return true, if this ingredient is active, false otherwise
+     */
     public boolean isActivated() {
         return activated;
     }
 
+    /**
+     * (de-)actives the ingredients
+     * @param activated true, if this ingredient should be active, false otherwise
+     */
     public void setActivated(boolean activated) {
         this.activated = activated;
     }

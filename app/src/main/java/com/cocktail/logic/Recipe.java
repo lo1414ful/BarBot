@@ -15,9 +15,10 @@ public class Recipe {
     protected final List<IngredientInRecipe> ingredients;
 
     /**
-     * Constructor for a new Recipe
+     * A Recipe models a cocktail recipe.
      *
      * @param name the name of the new Recipe
+     * @throws IllegalArgumentException if the given name is an empty string
      */
     public Recipe(@NonNull String name) throws IllegalArgumentException {
         Objects.requireNonNull(name, "name must not be null");
@@ -28,12 +29,20 @@ public class Recipe {
         ingredients = new ArrayList<>();
     }
 
+    /**
+     * @return the name of the recipe
+     */
     @NonNull
     public String getName() {
         return name;
     }
 
-    public void setName(@NonNull String name) {
+    /**
+     * sets the name of the recipe
+     * @param name the name
+     * @throws IllegalArgumentException if the given name is an empty string
+     */
+    public void setName(@NonNull String name) throws IllegalArgumentException {
         Objects.requireNonNull(name, "name must not be null");
         if (name.replace(" ", "").equals("")) {
             throw new IllegalArgumentException("name must not be empty");
@@ -58,7 +67,7 @@ public class Recipe {
     }
 
     /**
-     * removes the ingredient at the given position in the recipe (starting from 0)
+     * removes the ingredient at the given position in the recipe (starting at 0)
      *
      * @param position the position to remove from
      * @return true, if the ingredient was successfully removed, false otherwise if the position is out of bounds
@@ -72,10 +81,10 @@ public class Recipe {
     }
 
     /**
-     * removes the ingredient from the Recipe
+     * removes a given ingredient from the Recipe
      *
      * @param toRemove the ingredient to remove
-     * @return true, if the ingredient was removed successfully, false otherwise or if the given ingredient was not part of this recipe
+     * @return true, if the ingredient was removed successfully, false otherwise or if the given ingredient is not part of this recipe
      */
     public boolean removeIngredient(@NonNull Ingredient toRemove) {
         Objects.requireNonNull(toRemove, "ingredient must not be null");
@@ -85,9 +94,11 @@ public class Recipe {
 
     /**
      * swaps the position of the two given ingredients if, and only if both ingredients are part of this recipe
+     * and the two ingredients are not equal
      *
      * @param a first ingredient
      * @param b second ingredient
+     * @return true, if the ingredients were swapped successfully, false otherwise or when at least one ingredient is not part of this recipe
      */
     public boolean swapPositions(@NonNull Ingredient a, @NonNull Ingredient b) {
         Objects.requireNonNull(a, "ingredient must not be null");
@@ -95,6 +106,12 @@ public class Recipe {
         return swapPositions(new IngredientInRecipe(a, this), new IngredientInRecipe(b, this));
     }
 
+    /**
+     * same as {@link #swapPositions(Ingredient, Ingredient)} but with IngredientInRecipe-class
+     * @param a first ingredient
+     * @param b second ingredient
+     * @return true, if the ingredients were swapped successfully, false otherwise or if one or both ingredients were not part of this recipe
+     */
     public boolean swapPositions(@NonNull IngredientInRecipe a, @NonNull IngredientInRecipe b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
@@ -110,7 +127,13 @@ public class Recipe {
         return true;
     }
 
-    public void swapPositions(int pos1, int pos2) {
+    /**
+     * swaps the ingredients at the given positions
+     * @param pos1 first position
+     * @param pos2 second position
+     * @throws IndexOutOfBoundsException if a given position is out of bounds
+     */
+    public void swapPositions(int pos1, int pos2) throws IndexOutOfBoundsException {
         if (pos1 < 0 || pos1 >= ingredients.size() || pos2 < 0 || pos2 >= ingredients.size()) {
             throw new IndexOutOfBoundsException("position(s) are out of bounds");
         }
@@ -121,11 +144,21 @@ public class Recipe {
         return;
     }
 
+    /**
+     * Returns the index of the first occurrence of the specified ingredient in this recipe.
+     * @param ingr the ingredient to look up
+     * @return the index of the first occurence of the ingredient, or -1 if the ingredient is not part of this recipe
+     */
     public int getPositionOfIngredient(@NonNull Ingredient ingr) {
         Objects.requireNonNull(ingr);
         return getPositionOfIngredient(new IngredientInRecipe(ingr, this));
     }
 
+    /**
+     * same as {@link #getPositionOfIngredient(Ingredient)} but with IngredientInRecipe-class
+     * @param ingr the ingredient to look up
+     * @return the index of the first occurence of the ingredient, or -1 if the ingredient is not part of this recipe
+     */
     public int getPositionOfIngredient(@NonNull IngredientInRecipe ingr) {
         Objects.requireNonNull(ingr);
         return ingredients.indexOf(ingr);
