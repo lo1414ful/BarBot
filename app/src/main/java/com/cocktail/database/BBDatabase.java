@@ -21,11 +21,11 @@ import com.cocktail.database.entities.RecipeIngredientJoin;
  * It follows the singleton-design-pattern as only one instance of an access-object is needed.
  * @see #getSingleton(Context)
  */
-@Database(entities = {IngredientEntity.class, RecipeEntity.class, RecipeIngredientJoin.class}, version = 0)
+@Database(entities = {IngredientEntity.class, RecipeEntity.class, RecipeIngredientJoin.class}, version = 0, exportSchema = true)
 public abstract class BBDatabase extends RoomDatabase {
 
     private final static String DB_NAME = "Cookbook";
-    private final static Object DB_SYNCH = new Object();
+    private final static Object DB_SYNC = new Object();
     private static BBDatabase singleton;
 
 
@@ -62,7 +62,7 @@ public abstract class BBDatabase extends RoomDatabase {
     @NonNull
     public static BBDatabase getSingleton(@Nullable Context context) {
         if (singleton == null) {
-            synchronized(DB_SYNCH) {
+            synchronized(DB_SYNC) {
                 if (singleton == null) {
                     if (context == null) throw new NullPointerException("cannot initialize the" +
                             " BBDatabase without context");
