@@ -9,19 +9,12 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.cocktail.database.daos.IngredientDao;
-import com.cocktail.database.daos.RecipeDao;
-import com.cocktail.database.daos.RecipeIngredientDao;
-import com.cocktail.database.entities.IngredientEntity;
-import com.cocktail.database.entities.RecipeEntity;
-import com.cocktail.database.entities.RecipeIngredientJoin;
-
 /**
  * This class is for accessing the Barbot Database where all ingredients, recipes etc. are stored.
  * It follows the singleton-design-pattern as only one instance of an access-object is needed.
  * @see #getSingleton(Context)
  */
-@Database(entities = {IngredientEntity.class, RecipeEntity.class, RecipeIngredientJoin.class}, version = 0, exportSchema = true)
+@Database(entities = {IngredientEntity.class, RecipeEntity.class, RecipeIngredientJoin.class}, version = 1, exportSchema = true)
 public abstract class BBDatabase extends RoomDatabase {
 
     private final static String DB_NAME = "Cookbook";
@@ -29,20 +22,6 @@ public abstract class BBDatabase extends RoomDatabase {
     private static BBDatabase singleton;
 
 
-    //FIXME (???)
-/*
-    @NonNull
-    @Override
-    protected abstract SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config);
-
-    @NonNull
-    @Override
-    protected abstract InvalidationTracker createInvalidationTracker();
-*/
-    @Override
-    public void clearAllTables() {
-        //FIXME
-    }
 
     /**
      * this is the access-method for the BBDatabase-singleton. If the singleton has not yet been

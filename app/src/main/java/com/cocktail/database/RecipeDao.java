@@ -1,4 +1,4 @@
-package com.cocktail.database.daos;
+package com.cocktail.database;
 
 import androidx.room.Dao;
 

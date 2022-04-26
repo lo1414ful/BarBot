@@ -1,10 +1,10 @@
-package com.cocktail.database.entities;
+package com.cocktail.database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class RecipeIngredientJoin {
+public class RecipeEntity {
     @PrimaryKey
     public int uid;
 }

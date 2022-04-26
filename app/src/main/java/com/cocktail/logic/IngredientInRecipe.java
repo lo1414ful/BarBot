@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class IngredientInRecipe {
 
-    @NonNull
+    /*@NonNull
     private final Ingredient ingredient;
     @NonNull
     private final Recipe containingRecipe;
@@ -18,7 +18,7 @@ public class IngredientInRecipe {
      * the amount of pours is initialized with 1 by default, but can be set to any positive number with the {@link #setPours(int)}-method
      *  @param ingr the ingredient to represent in a recipe
      * @param containingRec the recipe this link is associated with
-     */
+     *//*
     public IngredientInRecipe(@NonNull Ingredient ingr, @NonNull Recipe containingRec) {
         Objects.requireNonNull(ingr);
         Objects.requireNonNull(containingRec);
@@ -29,7 +29,7 @@ public class IngredientInRecipe {
 
     /**
      * @return the ingredient of this link
-     */
+     *//*
     @NonNull
     public Ingredient getIngredient() {
         return this.ingredient;
@@ -38,7 +38,7 @@ public class IngredientInRecipe {
     /**
      * the recipe this link is associated with
      * @return
-     */
+     *//*
     @NonNull
     private Recipe getContainingRecipe() {
         return this.containingRecipe;
@@ -46,7 +46,7 @@ public class IngredientInRecipe {
 
     /**
      * @return the amount of pours of the ingredient in the associated recipe
-     */
+     *//*
     public int getPours() {
         return pours;
     }
@@ -55,7 +55,7 @@ public class IngredientInRecipe {
      * sets the amount of pours of the ingredient in the associated recipe
      * @param pours the amount of pours (must be positive)
      * @throws IllegalArgumentException if the given amount is zero or negative
-     */
+     *//*
     public void setPours(int pours) throws IllegalArgumentException {
         if (pours < 1) {
             throw new IllegalArgumentException("number of pours must be positive");
@@ -65,7 +65,7 @@ public class IngredientInRecipe {
 
     /**
      * @return the position this ingredient has in the associated recipe
-     */
+     *//*
     public int getPositionInRecipe() {
         return containingRecipe.getPositionOfIngredient(this);
     }
@@ -82,5 +82,5 @@ public class IngredientInRecipe {
     @Override
     public int hashCode() {
         return Objects.hash(containingRecipe, ingredient);
-    }
+    }*/
 }

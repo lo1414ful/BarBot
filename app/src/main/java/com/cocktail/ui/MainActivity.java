@@ -1,7 +1,9 @@
 package com.cocktail.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.cocktail.database.BBDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -13,7 +15,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainScrollingActivity extends AppCompatActivity {
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class MainActivity extends AppCompatActivity {
+
+    Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,8 @@ public class MainScrollingActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        executor.execute(() -> BBDatabase.getSingleton(MainActivity.this));
+        //executor.execute(() -> BBDatabase.getSingleton(null).clearAllTables());
     }
 
     @Override
@@ -48,7 +59,14 @@ public class MainScrollingActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_goto_settings) {
+        if (id == R.id.action_goto_ingredients) {
+            Intent intent = null;
+            intent = new Intent(MainActivity.this, IngredientsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_goto_bluetooth) {
+            //TODO
             return true;
         }
         return super.onOptionsItemSelected(item);

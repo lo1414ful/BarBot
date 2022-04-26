@@ -1,28 +1,61 @@
-package com.cocktail.logic;
+package com.cocktail.database;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+
 
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class Ingredient {
+@Entity
+public class IngredientEntity {
+    @PrimaryKey(autoGenerate = true)
+    long uid = 0;
 
     @NonNull
+    @ColumnInfo(name = "name")
     private String name;
+    @ColumnInfo(name = "position")
     private int position;
+    @ColumnInfo(name = "hold")
     private int hold;
+    @ColumnInfo(name = "wait")
     private int wait;
-    private boolean activated;
+    @ColumnInfo(name = "active")
+    private boolean active;
+
+
+
+    IngredientEntity() {}
+
 
     /**
      * Constructs an Ingredient which has a name, a position, a hold- and a wait duration between pours
      *
      * @param name the name of the Ingredient (must not be null or empty string)
-     * @param pos the position
+     * @param position the position
      * @param hold the hold duration (must not be negative)
      * @param wait the wait duration between subsequent pours (must not be negative)
      * @throws IllegalArgumentException if the given durations are negative or if the name is an empty string
      */
-    public Ingredient(@NonNull String name, int pos, int hold, int wait) throws IllegalArgumentException {
+    @Ignore
+    private IngredientEntity(@NonNull String name, int position, int hold, int wait) throws IllegalArgumentException {
+        this.name = name;
+        this.position = position;
+        this.hold = hold;
+        this.wait = wait;
+        active = false;
+    }
+
+    public static LiveData<IngredientEntity> createIngredient(@NonNull String name, int position, int hold, int wait) throws IllegalArgumentException {
         Objects.requireNonNull(name, "name must not be null");
         if (name.replace(" ", "").equals("") || hold < 0 || wait < 0) {
             String message = "";
@@ -37,13 +70,27 @@ public class Ingredient {
             }
             throw new IllegalArgumentException("failed to create Ingredient:" + message);
         }
-        this.name = name;
-        this.position = pos;
-        this.hold = hold;
-        this.wait = wait;
-        activated = false;
+        IngredientEntity entity = new IngredientEntity(name, position, hold, wait);
+        Callable<Long> callable = new Callable<Long>() {
+            @Override
+            public Long call() {
+                return BBDatabase.getSingleton(null).ingredientDao().insert(entity);
+            }
+        };
+        Future<Long> f = Executors.newSingleThreadExecutor().submit(callable);
+
+        try {
+            entity.uid = f.get();
+        } catch (ExecutionException | InterruptedException e) {
+            // TODO;
+        }
+        return BBDatabase.getSingleton(null).ingredientDao().getByUid(entity.uid);
     }
 
+
+    public long getUid() {
+        return uid;
+    }
 
     /**
      * @return the name of the ingredient
@@ -123,16 +170,16 @@ public class Ingredient {
     /**
      * @return true, if this ingredient is active, false otherwise
      */
-    public boolean isActivated() {
-        return activated;
+    public boolean isActive() {
+        return active;
     }
 
     /**
      * (de-)actives the ingredients
-     * @param activated true, if this ingredient should be active, false otherwise
+     * @param active true, if this ingredient should be active, false otherwise
      */
-    public void setActivated(boolean activated) {
-        this.activated = activated;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
@@ -140,13 +187,13 @@ public class Ingredient {
         if (o == null || !this.getClass().isAssignableFrom(o.getClass())) {
             return false;
         }
-        Ingredient i = (Ingredient) o;
-        return (i.name.equals(this.name));
+        IngredientEntity i = (IngredientEntity) o;
+        return (i.getUid() != 0 && i.getUid() == this.getUid());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(getUid());
     }
 
 }
